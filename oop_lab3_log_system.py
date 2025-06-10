@@ -48,9 +48,14 @@ class FileHandler(ILogHandler):
     def __init__(self, filename: str):
         self.filename = filename
 
+    # ИСПРАВЛЕНО
     def handle(self, text: str) -> None:
-        with open(self.filename, "a", encoding="utf-8") as f:
-            f.write(f"[{datetime.now()}] {text}\n")
+        try:
+            with open(self.filename, "a", encoding="utf-8") as f:
+                f.write(f"[{datetime.now()}] {text}\n")
+        except (IOError, OSError) as e:
+            print(f"Failed to write to log file: {e}")
+
 
 
 class SocketHandler(ILogHandler):
